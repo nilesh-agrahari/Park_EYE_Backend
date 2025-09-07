@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from PARK_EYE.models import Suspected, VehicleRecord, Location, Police
+from PARK_EYE.models import Suspected, VehicleRecord, Location, Police, Parking
 
 
 class SuspectedSerializer(serializers.ModelSerializer):
@@ -19,11 +19,34 @@ class LocationSerializer(serializers.ModelSerializer):
         model = Location
         fields = '__all__'
 
+class ParkingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Parking
+        fields = ['id', 'username', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        password=validated_data.pop('password')
+        parking = Parking(username=validated_data['username'])
+        parking.set_password(password)
+        parking.save()
+        return parking
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        if password:
+            instance.set_password(password)
+        instance.save()
+        return instance    
+
 
 class PoliceSerializer(serializers.ModelSerializer):
     locations = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=Location.objects.all()
+        queryset=Parking.objects.all()
     )
 
     class Meta:

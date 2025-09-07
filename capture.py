@@ -12,7 +12,7 @@ import re
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "PARKEYE.settings")  # replace with your project name
 django.setup()
 
-from PARK_EYE.models import VehicleRecord,Suspected
+from PARK_EYE.models import VehicleRecord,Suspected,Parking
 from django.utils import timezone
 
 # Path to tesseract executable
@@ -25,6 +25,7 @@ from PARK_EYE.models import VehicleRecord, Suspected
 # Load active vehicles into memory and initialize slot grid
 slots = [['' for _ in range(3)] for _ in range(2)]
 active_vehicles = VehicleRecord.objects.filter(in_parking=True)
+parking=Parking.objects.get(username="KIET Group Of Institutions, Muradnager, Ghaziabad")
 
 for vehicle in active_vehicles:
     if vehicle.slot_position:
@@ -37,14 +38,9 @@ def database(text):
     if not text:
         return
 
-    # Step 1: Check suspected list
-    suspected = Suspected.objects.filter(regs_no=text).exists()
-    if suspected:
-        print(f"🚨 ALERT: Suspected vehicle detected: {text}\n")
-        Suspected.objects.filter(found_location__isnull=True).update(found_location="KIET Group Of Institutions, Muradnager, Ghaziabad")
 
     # Step 2: Check if vehicle is already inside
-    existing_record = VehicleRecord.objects.filter(regs_no=text, in_parking=True).first()
+    existing_record = VehicleRecord.objects.filter(parking=parking,regs_no=text, in_parking=True).first()
 
     if existing_record:
         # Mark exit
@@ -84,12 +80,24 @@ def database(text):
 
         # Step 5: Save to DB
         VehicleRecord.objects.create(
+            parking=parking,
             regs_no=text,
             in_parking=True,
             in_date_time=timezone.now(),
             slot_position=slot_pos
         )
         print(f"✅ Entry recorded for: {text} at {timezone.now().strftime('%Y-%m-%d %H:%M:%S')} at slot '{slot_pos}'")
+
+    # Step 1: Check suspected list
+    suspected = Suspected.objects.filter(regs_no=text).exists()
+    if suspected:
+        print(f"🚨 ALERT: Suspected vehicle detected: {text}\n")
+        Suspected.objects.filter(found_location__isnull=True).update(found_location=parking.username)
+        vehicle = VehicleRecord.objects.get(regs_no=text, in_parking=True)
+        vehicle.suspected = True
+        vehicle.save(update_fields=["suspected"])        
+
+        
 
     # Step 6: Show slot status
     print("\nCurrent Parking Slots:")
