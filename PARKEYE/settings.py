@@ -87,6 +87,11 @@ DATABASES = {
     )
 }
 
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         default='')  # for localhost testing
+# }
+
 
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default session engine
