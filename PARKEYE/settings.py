@@ -24,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+# DEBUG = True
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
 
 
@@ -76,26 +77,17 @@ WSGI_APPLICATION = 'PARKEYE.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-# postgresql://postgres:[YOUR-PASSWORD]@db.wvepeeooudxzjfkoiuri.supabase.co:5432/postgres
-# postgresql://postgres:roXzonbxWHdNBMSTmPjjxrvFdemuvBDf@yamanote.proxy.rlwy.net:57352/railway
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'railway',
-#         'USER': 'postgres',
-#         'PASSWORD': 'roXzonbxWHdNBMSTmPjjxrvFdemuvBDf',
-#         'HOST': 'yamanote.proxy.rlwy.net',
-#         'PORT': '57352',
-        
-#     }
-# }
+
+
 
 DATABASES = {
     "default": dj_database_url.config(
         default=os.environ.get("DATABASE_URL")  # Render will provide DATABASE_URL
     )
 }
+
+
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default session engine
 
