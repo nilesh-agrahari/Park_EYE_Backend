@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.utils.timezone import now
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.db import connection
 
 from PARK_EYE.models import Suspected, Police, VehicleRecord, Location, Parking
 from .serializers import (
@@ -152,12 +152,9 @@ def parking_login_check(request):
 
 
 
-def reset_admin_password(request):
-    # WARNING: Use a strong temporary password
+def test_db_connection(request):
     try:
-        user = User.objects.get(username='admin@parkeye')
-        user.set_password('1234')
-        user.save()
-        return HttpResponse("Admin password reset successfully")
-    except User.DoesNotExist:
-        return HttpResponse("Admin user does not exist")        
+        connection.ensure_connection()
+        return HttpResponse("✅ Database connection successful")
+    except Exception as e:
+        return HttpResponse(f"❌ Database error: {e}")       
