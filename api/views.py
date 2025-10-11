@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.utils.timezone import now
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponse
-from django.db import connection
+import socket
+from django.http import JsonResponse
 
 from PARK_EYE.models import Suspected, Police, VehicleRecord, Location, Parking
 from .serializers import (
@@ -152,9 +152,9 @@ def parking_login_check(request):
 
 
 
-def test_db_connection(request):
+def check_ipv6(request):
     try:
-        connection.ensure_connection()
-        return HttpResponse("✅ Database connection successful")
+        socket.getaddrinfo("db.wvepeeooudxzjfkoiuri.supabase.co", 5432, socket.AF_INET6)
+        return JsonResponse({"IPv6": "Supported"})
     except Exception as e:
-        return HttpResponse(f"❌ Database error: {e}")       
+        return JsonResponse({"IPv6": str(e)})     
