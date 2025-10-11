@@ -28,6 +28,16 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
 # ALLOWED_HOSTS = []
 
+# Backend domain for ALLOWED_HOSTS
+ALLOWED_HOSTS = ["park-eye-backend.onrender.com"]
+
+# Domains trusted for CSRF (where POST requests originate)
+CSRF_TRUSTED_ORIGINS = [
+    "https://parkeye.onrender.com",  # in case you access admin directly
+    "https://parkeye.vercel.app",  # frontend domain
+]
+
+
 # Application definition
 
 INSTALLED_APPS = [
