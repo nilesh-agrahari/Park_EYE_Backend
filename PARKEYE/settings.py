@@ -28,9 +28,6 @@ DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
 # ALLOWED_HOSTS = []
 
-# Backend domain for ALLOWED_HOSTS
-ALLOWED_HOSTS = ["park-eye-backend.onrender.com"]
-
 # Domains trusted for CSRF (where POST requests originate)
 CSRF_TRUSTED_ORIGINS = [
     "https://parkeye.onrender.com",  # in case you access admin directly
@@ -102,7 +99,7 @@ DATABASES = {
 
 # DATABASES = {
 #     "default": dj_database_url.config(
-#         default='',
+#         default='postgresql://postgres:ARBwGRbSnT2kHZax@db.wvepeeooudxzjfkoiuri.supabase.co:5432/postgres',
 #         conn_max_age=600,
 #         ssl_require=True, 
 #         )  # for localhost testing

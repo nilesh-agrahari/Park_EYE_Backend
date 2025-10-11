@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     SuspectedViewSet, VehicleRecordViewSet,
-    LocationViewSet, PoliceViewSet,
+    LocationViewSet, PoliceViewSet,reset_admin_password,
     add_suspected_vehicle, police_login_check, police_dashboard,parking_login_check
 )
 
@@ -18,4 +18,5 @@ urlpatterns = [
     path('police-login/', police_login_check, name="police_login"),
     path('police-dashboard/<int:police_id>/', police_dashboard, name="police_dashboard"),
     path('parking-login/', parking_login_check, name="parking_login"),
+    path('reset-admin-password/', reset_admin_password),
 ]

@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.utils.timezone import now
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 from PARK_EYE.models import Suspected, Police, VehicleRecord, Location, Parking
 from .serializers import (
@@ -110,7 +112,7 @@ def police_dashboard(request, police_id):
     police = get_object_or_404(Police, id=police_id)
     police_locations = police.locations.values_list("username", flat=True)
 
-    suspected_vehicles = Suspected.objects.filter(found_location__in=police_locations)
+    suspected_vehicles = Suspected.objects.filter(found_location__in=police_locations , is_founded=False).order_by('-date_time')
     serializer = SuspectedSerializer(suspected_vehicles, many=True)
 
     return Response({
@@ -147,3 +149,15 @@ def parking_login_check(request):
 
     except Parking.DoesNotExist:
         return Response({"error": "Invalid username or password"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+def reset_admin_password(request):
+    # WARNING: Use a strong temporary password
+    try:
+        user = User.objects.get(username='admin@parkeye')
+        user.set_password('1234')
+        user.save()
+        return HttpResponse("Admin password reset successfully")
+    except User.DoesNotExist:
+        return HttpResponse("Admin user does not exist")        
