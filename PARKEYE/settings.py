@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 # DEBUG = True
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
-
+# ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -87,9 +87,13 @@ DATABASES = {
     )
 }
 
+
 # DATABASES = {
 #     "default": dj_database_url.config(
-#         default='')  # for localhost testing
+#         default='',
+#         conn_max_age=600,
+#         ssl_require=True, 
+#         )  # for localhost testing
 # }
 
 
