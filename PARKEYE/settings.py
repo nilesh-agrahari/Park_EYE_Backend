@@ -88,22 +88,22 @@ WSGI_APPLICATION = 'PARKEYE.wsgi.application'
 
 
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
-        conn_max_age=600,
-        ssl_require=True,  # Render will provide DATABASE_URL
-    )
-}
-
-
 # DATABASES = {
 #     "default": dj_database_url.config(
-#         default='postgresql://postgres:ARBwGRbSnT2kHZax@db.wvepeeooudxzjfkoiuri.supabase.co:5432/postgres',
+#         default=os.environ.get("DATABASE_URL"),
 #         conn_max_age=600,
-#         ssl_require=True, 
-#         )  # for localhost testing
+#         ssl_require=True,  # Render will provide DATABASE_URL
+#     )
 # }
+
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default='postgresql://postgres:ARBwGRbSnT2kHZax@db.wvepeeooudxzjfkoiuri.supabase.co:5432/postgres',
+        conn_max_age=600,
+        ssl_require=True, 
+        )  # for localhost testing
+}
 
 
 
