@@ -20,13 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(ohx=k%b9)i)^irv0cacecb9v7a7)mjxb=+x789flrsov-94bs'
-# SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
+# SECRET_KEY = 'django-insecure-(ohx=k%b9)i)^irv0cacecb9v7a7)mjxb=+x789flrsov-94bs'
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
-DEBUG = True
-# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
-ALLOWED_HOSTS = []
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
+# DEBUG = True
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost").split(",")
+# ALLOWED_HOSTS = []
 
 # Domains trusted for CSRF (where POST requests originate)
 CSRF_TRUSTED_ORIGINS = [
@@ -88,22 +88,22 @@ WSGI_APPLICATION = 'PARKEYE.wsgi.application'
 
 
 
-# DATABASES = {
-#     "default": dj_database_url.config(
-#         default=os.environ.get("DATABASE_URL"),
-#         conn_max_age=600,
-#         ssl_require=True,  # Render will provide DATABASE_URL
-#     )
-# }
-
-
 DATABASES = {
     "default": dj_database_url.config(
-        default='postgresql://postgres.wvepeeooudxzjfkoiuri:ARBwGRbSnT2kHZax@aws-1-ap-south-1.pooler.supabase.com:5432/postgres',
+        default=os.environ.get("DATABASE_URL"),
         conn_max_age=600,
-        ssl_require=True, 
-        )  # for localhost testing
+        ssl_require=True,  # Render will provide DATABASE_URL
+    )
 }
+
+
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         default='postgresql://postgres.wvepeeooudxzjfkoiuri:ARBwGRbSnT2kHZax@aws-1-ap-south-1.pooler.supabase.com:5432/postgres',
+#         conn_max_age=600,
+#         ssl_require=True, 
+#         )  # for localhost testing
+# }
 
 
 
